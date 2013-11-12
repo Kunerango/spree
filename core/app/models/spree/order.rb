@@ -36,7 +36,7 @@ module Spree
     alias_attribute :shipping_address, :ship_address
 
     has_many :state_changes, as: :stateful
-    has_many :line_items, -> { order('created_at ASC') }, dependent: :destroy
+    has_many :line_items, -> { order("#{LineItem.table_name}.created_at ASC") }, dependent: :destroy
     has_many :payments, dependent: :destroy
     has_many :return_authorizations, dependent: :destroy
     has_many :adjustments, -> { order("#{Adjustment.table_name}.created_at ASC") }, as: :adjustable, dependent: :destroy
@@ -79,7 +79,7 @@ module Spree
     end
 
     def self.between(start_date, end_date)
-      where(created_at: start_date..end_date)
+      where("#{self.table_name}.created_at" => start_date..end_date)
     end
 
     def self.by_customer(customer)
